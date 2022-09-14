@@ -1,8 +1,9 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { LockClosedIcon } from '@heroicons/react/24/solid';
 import { useAuth } from '@hooks/useAuth'; 
 
 export default function LoginPage() {
+  const [loginError, setLoginError] = useState(false); 
   const emailRef = useRef(null) 
   const passwordRef = useRef(null) 
   const auth = useAuth(); 
@@ -14,9 +15,11 @@ export default function LoginPage() {
     
     auth.signIn(email,password) 
       .then(res => {
+        setLoginError(false);
         console.log('login success');
       })
       .catch(err => {
+        setLoginError(true);
         console.log('login error');
       })
   } 
@@ -29,7 +32,7 @@ export default function LoginPage() {
             <img className="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow" />
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Sign in to your account</h2>
           </div>
-            <form className="mt-8 space-y-6" >
+            <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
               <input type="hidden" name="remember" defaultValue="true" />
               <div className="rounded-md shadow-sm -space-y-px">
                 <div>
@@ -90,6 +93,10 @@ export default function LoginPage() {
                   Sign in
                 </button>
               </div>
+              {loginError  
+                ? <p className='text-center'>usuario o contraseña incorrectas</p>
+                : ''
+              } 
             </form>
         </div>
       </div>
