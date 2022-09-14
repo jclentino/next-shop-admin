@@ -1,8 +1,7 @@
 import React, { useState, useContext, createContext } from "react";
-import Cookies from 'js-cookie'
 import axios from 'axios'
-import endPoints from "@services/api"; 
-
+import endPoints from "@services/api";
+import Cookies from "js-cookie";
 
 const AuthContext = createContext();
 
@@ -18,24 +17,32 @@ export const useAuth = ()=> {
 function useProviderAuth(){
     const [user,setUser] = useState(null);
 
-    const options = { 
+    const options = {
         Headers: {
             accept: '*/*',
             'Content-Type': 'application/json',
         }
-    }; 
+    };
 
-    const signIn = async (email,password)=> { 
+    const signIn = async (email,password)=> {
         const { data: access_token } = await axios.post(endPoints.auth.login, { email, password}, options) 
         console.log(access_token);
 
-        if (access_token){ 
-            Cookies.set('token', access_token.access_token, { expires: 5 });
-        } 
-    }; 
+        if (access_token){
+            const token = access_token.access_token; 
+            Cookies.set('token', token, { expires: 5 }); 
+
+            axios.defaults.headers.Authorization = `Bearer ${token}`; 
+            const { data: user } = await axios.get(endPoints.auth.profile); 
+            console.log(user); 
+            setUser(user); 
+        }
+    };
 
     return {
         user,
         signIn,
     };
 };
+
+
