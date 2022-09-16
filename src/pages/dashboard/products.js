@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { CheckIcon } from '@heroicons/react/20/solid';
 import Modal from "@common/Modal";
 import { PlusIcon } from "@heroicons/react/20/solid"
+import FormProduct from "@components/FormProduct";
 
 export default function Products(){
     const [open, setOpen] = useState(false);
@@ -23,7 +23,6 @@ export default function Products(){
                             onClick={()=> setOpen(true)}
                         >
                             <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" ></PlusIcon>
-                            {/* <CheckIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" /> */}
                             Add Product
                         </button>
                     </span>
@@ -98,7 +97,7 @@ export default function Products(){
                 open={open}
                 setOpen={setOpen}
             >
-                <h1>Modal</h1>
+                <FormProduct />
             </Modal>
         </>
     )
