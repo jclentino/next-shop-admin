@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { addProduct } from "@services/api/product";
 
-export default function FormProduct() {
+export default function FormProduct({ setOpen, setAlert }) {
     const formRef = useRef(null);    
 
     const handleSubmit = (e)=> {
@@ -19,8 +19,23 @@ export default function FormProduct() {
         }
 
         addProduct(data)  
-          .then(console.log)
-          .catch(console.error)
+          .then(()=> {
+            setAlert({
+              active: true, 
+              message: 'Product added successfully',
+              type: 'success',
+              autoClose: false 
+            })
+            setOpen(false);
+          })
+          .catch(error => {
+            setAlert({
+              active: true, 
+              message: error.message,
+              type: 'error',
+              autoClose: false 
+            })
+          })
     }
 
     return (
