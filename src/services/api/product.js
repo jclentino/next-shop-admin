@@ -13,4 +13,9 @@ const addProduct = async (body)=> {
     return response.data
 }
 
-export { addProduct }
+const deleteProduct = async (id)=> {
+    const response = await axios.delete(endPoints.products.deleteProducts(id))
+    return response.data
+}
+
+export { addProduct, deleteProduct }

@@ -1,16 +1,30 @@
 import { useState, useEffect } from "react";
 import Modal from "@common/Modal";
-import { PlusIcon } from "@heroicons/react/20/solid"
+import { PlusIcon, XCircleIcon } from "@heroicons/react/20/solid"
 import FormProduct from "@components/FormProduct";
 import axios from "axios";
 import endPoints from "@services/api";
 import useAlert from "@hooks/useAlert";
 import Alert from "@common/Alert";
+import { deleteProduct } from "@services/api/product";
 
 export default function Products(){
     const [open, setOpen] = useState(false);
     const [products, setProducts] = useState([]);
     const { alert, setAlert, toggleAlert } = useAlert(); 
+
+    const handleDelete = (id) => {
+        deleteProduct(id)
+            .then(()=> {
+                setAlert({
+                    active: true, 
+                    message: "Delete product successfully",
+                    type: 'error',
+                    autoClose: true 
+                })
+            })
+            .catch(console.error);
+    }
 
     useEffect(()=> {
         async function getProducts (){
@@ -100,9 +114,11 @@ export default function Products(){
                                                 </a>
                                             </td>
                                             <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                                <a href="#" className="text-indigo-600 hover:text-indigo-900">
-                                                    Delete
-                                                </a>
+                                                <XCircleIcon 
+                                                    className="flex-shrink-0 h-6 w-6 text-gray-400 cursor-pointer"
+                                                    aria-hidden="true"
+                                                    onClick={()=> handleDelete(product.id)}
+                                                />
                                             </td>
                                         </tr>
                                     ))}
