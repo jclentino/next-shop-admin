@@ -7,6 +7,7 @@ import endPoints from "@services/api";
 import useAlert from "@hooks/useAlert";
 import Alert from "@common/Alert";
 import { deleteProduct } from "@services/api/product";
+import Link from "next/link";
 
 export default function Products(){
     const [open, setOpen] = useState(false);
@@ -23,7 +24,14 @@ export default function Products(){
                     autoClose: true 
                 })
             })
-            .catch(console.error);
+            .catch(()=> {
+                setAlert({
+                    active: true, 
+                    message: error.message,
+                    type: 'error',
+                    autoClose: false 
+                })
+            });
     }
 
     useEffect(()=> {
