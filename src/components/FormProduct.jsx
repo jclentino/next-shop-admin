@@ -1,8 +1,10 @@
 import { useRef } from "react";
-import { addProduct } from "@services/api/product";
+import { addProduct, updateProduct } from "@services/api/product";
+import { useRouter } from "next/router";
 
 export default function FormProduct({ setOpen, setAlert, product }) {
     const formRef = useRef(null);    
+    const router = useRouter();
 
     const handleSubmit = (e)=> {
         e.preventDefault();
@@ -18,24 +20,30 @@ export default function FormProduct({ setOpen, setAlert, product }) {
           ]
         }
 
-        addProduct(data)  
-          .then(()=> {
-            setAlert({
-              active: true, 
-              message: 'Product added successfully',
-              type: 'success',
-              autoClose: false 
+        if (product){
+            updateProduct(product.id, data)
+            .then(()=> router.push(`/dashboard/products`))
+            .catch((err)=> console.log(err));
+        } else{
+            addProduct(data)  
+            .then(()=> {
+              setAlert({
+                active: true, 
+                message: 'Product added successfully',
+                type: 'success',
+                autoClose: false 
+              })
+              setOpen(false);
             })
-            setOpen(false);
-          })
-          .catch(error => {
-            setAlert({
-              active: true, 
-              message: error.message,
-              type: 'error',
-              autoClose: false 
+            .catch(error => {
+              setAlert({
+                active: true, 
+                message: error.message,
+                type: 'error',
+                autoClose: false 
+              })
             })
-          })
+        }
     }
 
     return (
